@@ -23,7 +23,7 @@ function formatTimeAgo(dateString) {
 }
 
 function generateHTML(data) {
-  const { generatedAt, opportunities, totalCount } = data;
+  const { generatedAt, opportunities, totalCount, source } = data;
   const lastUpdate = new Date(generatedAt).toLocaleString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
@@ -94,6 +94,7 @@ function generateHTML(data) {
       </h1>
       <p class="text-gray-400 text-lg">
         Top ${totalCount} opportunities (YES+NO < 1) · Last updated: <span class="text-neon-blue font-mono">${lastUpdate}</span>
+        ${source ? ` · Source: ${source}` : ''}
       </p>
       <div class="mt-4 flex justify-center gap-4 flex-wrap">
         <button onclick="location.reload()" class="px-4 py-2 bg-neon-blue/20 border border-neon-blue/50 rounded-lg hover:bg-neon-blue/30 transition text-neon-blue">
@@ -186,8 +187,12 @@ function generateHTML(data) {
 </html>`;
 }
 
-// Read data and generate
-const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
-const html = generateHTML(data);
-fs.writeFileSync('index.html', html);
-console.log('✅ index.html generated');
+// Read data and generate (if called standalone)
+if (require.main === module) {
+  const data = JSON.parse(fs.readFileSync('data.json', 'utf8'));
+  const html = generateHTML(data);
+  fs.writeFileSync('index.html', html);
+  console.log('✅ index.html generated');
+}
+
+module.exports = { generateHTML, formatNumber, formatPercent, formatTimeAgo };

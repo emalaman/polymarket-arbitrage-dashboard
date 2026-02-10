@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polymarket Arbitrage Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            neon: {
+              blue: '#00f0ff',
+              purple: '#a855f7',
+              green: '#10b981',
+              pink: '#ec4899',
+            },
+            dark: {
+              900: '#0a0a0f',
+              800: '#111118',
+              700: '#1a1a24',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0a0a0f;
+      color: #e5e7eb;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .neon-text {
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+    }
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15);
+    }
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+    .badge-bullish { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-bearish { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+  </style>
+</head>
+<body class="min-h-screen bg-dark-900">
+  <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Header -->
+    <header class="mb-10 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2 neon-text bg-gradient-to-r from-neon-blue via-neon-purple to-neon-pink bg-clip-text text-transparent">
+        🎯 Polymarket Arbitrage
+      </h1>
+      <p class="text-gray-400 text-lg">
+        Top 10 opportunities (YES+NO < 1) · Last updated: <span class="text-neon-blue font-mono">04:59:15 PM</span>
+         · Source: demo (mock data)
+      </p>
+      <div class="mt-4 flex justify-center gap-4 flex-wrap">
+        <button onclick="location.reload()" class="px-4 py-2 bg-neon-blue/20 border border-neon-blue/50 rounded-lg hover:bg-neon-blue/30 transition text-neon-blue">
+          🔄 Refresh now
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      <div class="bg-dark-800 p-4 rounded-xl border border-dark-700">
+        <div class="text-gray-400 text-sm">Opportunities</div>
+        <div class="text-2xl font-bold text-neon-blue">10</div>
+      </div>
+      <div class="bg-dark-800 p-4 rounded-xl border border-dark-700">
+        <div class="text-gray-400 text-sm">Avg Spread</div>
+        <div class="text-2xl font-bold text-neon-green">
+          2.60%
+        </div>
+      </div>
+      <div class="bg-dark-800 p-4 rounded-xl border border-dark-700">
+        <div class="text-gray-400 text-sm">Max Spread</div>
+        <div class="text-2xl font-bold text-neon-pink">
+          3.00%
+        </div>
+      </div>
+      <div class="bg-dark-800 p-4 rounded-xl border border-dark-700">
+        <div class="text-gray-400 text-sm">Auto-refresh</div>
+        <div class="text-lg font-mono text-neon-purple">60s</div>
+      </div>
+    </div>
+
+    <!-- Opportunities Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-1', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Bitcoin reach $100K by end of 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 45%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">45.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 52%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">52.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $1,500,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-2', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Ethereum ETF be approved in Q2 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 62%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">62.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 35%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">35.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $2,300,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-4', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Fed cut rates in June 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 72%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">72.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 25%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">25.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $1,200,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-6', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will AI regulation pass US Congress in 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 55.00000000000001%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">55.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 42%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">42.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $650,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-8', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Bitcoin ETF inflows turn positive in Q2?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 52%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">52.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 45%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">45.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $950,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-10', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            3.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will CBDC launch in US by 2026?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 22%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">22.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 75%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">75.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $720,000</span>
+          <span>Sum: 0.9700</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-3', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            2.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Trump win the 2024 US election?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 48%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">48.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 50%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">50.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $5,000,000</span>
+          <span>Sum: 0.9800</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-5', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            2.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Solana flip Ethereum market cap by 2026?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 18%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">18.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 80%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">80.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $800,000</span>
+          <span>Sum: 0.9800</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-7', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            2.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Recession hit US in 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 38%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">38.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 60%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">60.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $1,800,000</span>
+          <span>Sum: 0.9800</span>
+        </div>
+      </article>
+    
+      <article class="bg-dark-800 rounded-xl p-5 border border-dark-700 card-hover cursor-pointer" onclick="window.open('https://polymarket.com/market/mock-9', '_blank')">
+        <div class="flex items-start justify-between mb-3">
+          <span class="badge badge-bearish">
+            2.00% spread
+          </span>
+          <span class="text-xs text-gray-500">Just now</span>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-4 leading-tight">Will Ethereum 2.0 upgrade complete in 2025?</h3>
+        <div class="space-y-3 mb-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">YES</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-blue" style="width: 70%"></div>
+              </div>
+              <span class="font-mono text-neon-blue font-bold">70.00%</span>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-400">NO</span>
+            <div class="flex items-center gap-2">
+              <div class="w-32 h-2 bg-dark-700 rounded-full overflow-hidden">
+                <div class="h-full bg-neon-pink" style="width: 28.000000000000004%"></div>
+              </div>
+              <span class="font-mono text-neon-pink font-bold">28.00%</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex justify-between text-xs text-gray-500 border-t border-dark-700 pt-3">
+          <span>Vol: $1,100,000</span>
+          <span>Sum: 0.9800</span>
+        </div>
+      </article>
+    
+    </div>
+
+    
+  </div>
+
+  <footer class="text-center py-8 text-gray-500 text-sm mt-12 border-t border-dark-800">
+    Data from Polymarket API · Refreshes automatically · Made by EmilIA
+  </footer>
+
+  <script>
+    // Auto-refresh every 60 seconds
+    setTimeout(() => location.reload(), 60000);
+  </script>
+</body>
+</html>

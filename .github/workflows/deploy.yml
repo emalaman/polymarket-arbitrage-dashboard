@@ -2,11 +2,9 @@ name: Deploy Polymarket Dashboard
 
 on:
   schedule:
-    # Run every minute (GitHub minimum is 5 minutes for free tier, but we'll use 5 min)
-    - cron: '*/1 * * * *'  # Every minute (will be throttled to 5 min minimum by GitHub)
+    # Run every 5 minutes (GitHub minimum for free tier)
+    - cron: '*/5 * * * *'
   workflow_dispatch: # Allow manual trigger
-  push:
-    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -34,7 +32,12 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         git add index.html
-        git diff --quiet && echo "No changes to commit" || git commit -m "🔄 Update market data - $(date -u '+%Y-%m-%d %H:%M UTC')"
-        git push origin main
+        # Only commit if there are changes
+        if ! git diff --cached --quiet; then
+          git commit -m "🔄 Update market data - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push origin main
+        else
+          echo "No changes to commit"
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
